@@ -1,0 +1,36 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home | Deepfake Detector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-950 text-white min-h-screen flex items-center justify-center">
+  <div class="bg-gray-800 p-10 rounded-2xl shadow-xl w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Upload a Video or Image</h2>
+    <form id="uploadForm">
+      <input type="file" name="file" id="fileInput" class="mb-4 w-full text-white" required>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded-lg">Analyze</button>
+    </form>
+    <div id="result" class="mt-6 text-center text-xl font-semibold"></div>
+  </div>
+
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById("fileInput");
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+
+      const res = await fetch("http://127.0.0.1:5000/detect", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      document.getElementById("result").textContent = "Result: " + data.result;
+    });
+  </script>
+</body>
+</html>
